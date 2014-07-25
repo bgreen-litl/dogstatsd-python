@@ -176,8 +176,8 @@ class DogStatsd(object):
     def _send_to_server(self, packet):
         try:
             self.socket.send(packet.encode(self.encoding))
-        except socket.error:
-            log.exception("Error submitting metric")
+        except socket.error as e:
+            log.error("Error submitting metric: %s" % e)
 
     def _send_to_buffer(self, packet):
         self.buffer.append(packet)
@@ -225,8 +225,8 @@ class DogStatsd(object):
 
         try:
             self.socket.send(string.encode(self.encoding))
-        except Exception:
-            log.exception(u'Error submitting event "%s"' % title)
+        except Exception as e:
+            log.error(u'Error submitting event "%s": %s' % (title, e))
 
 
 statsd = DogStatsd()
